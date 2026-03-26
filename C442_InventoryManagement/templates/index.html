@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 style="text-align:center">Inventory</h1>
+
+<form method="GET" action="{{ url_for('inventory.index') }}" class="search-form">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search product name">
+    <button type="submit">Search</button>
+</form>
+
+<div id="chartContainer" style="width: 900px; height: 400px; margin: 20px auto; display:none;">
+    <canvas id="categoryChart"></canvas>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Category</th>
+
+            {% if current_user.role in ['admin', 'editor'] %}
+                <th>Actions</th>
+            {% endif %}
+        </tr>
+    </thead>
+
+    <tbody>
+    {% for p in products %}
+
+    <!-- VIEW ROW -->
+    <tr id="view-{{ p.ProductId }}">
+        <td>{{ p.ProductId }}</td>
+        <td>{{ p.Name }}</td>
+        <td>{{ p.Price }}</td>
+        <td>{{ p.Quantity }}</td>
+        <td>{{ p.Category }}</td>
+
+        {% if current_user.role in ['admin', 'editor'] %}
+        <td>
+            <button type="button" onclick="toggleEdit({{ p.ProductId }})">Edit</button>
+
+            {% if current_user.role == 'admin' %}
+            <form method="POST"
+                  action="{{ url_for('inventory.delete_product', product_id=p.ProductId, search=search) }}"
+                  style="display:inline;">
+                <button type="submit"
+                        class="delete-btn"
+                        onclick="return confirm('Are you sure you want to delete this product?');">
+                    Delete
+                </button>
+            </form>
+            {% endif %}
+        </td>
+        {% endif %}
+    </tr>
+
+    <!-- EDIT ROW -->
+    {% if current_user.role in ['admin', 'editor'] %}
+    <tr id="edit-{{ p.ProductId }}" style="display:none;">
+        <form method="POST"
+              action="{{ url_for('inventory.update_product', product_id=p.ProductId, search=search) }}" class="row-input">
+
+            <td>{{ p.ProductId }}</td>
+
+            <td>
+                <input type="text" name="name" value="{{ p.Name }}" required minlength="1" maxlength="45">
+            </td>
+
+            <td>
+                <input type="number" name="price" value="{{ p.Price }}" required min="0" max="9999.99" step="0.01">
+            </td>
+
+            <td>
+                <input type="number" name="quantity" value="{{ p.Quantity }}" required min="0" max="10000">
+            </td>
+
+            <td>
+                <select name="category">
+                    {% for category in categories %}
+                        <option value="{{ category }}" {% if category == p.Category %}selected{% endif %}>
+                            {{ category }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </td>
+
+            <td>
+                <button type="submit">Update</button>
+                <button type="button" onclick="toggleEdit({{ p.ProductId }})">Cancel</button>
+            </td>
+
+        </form>
+    </tr>
+    {% endif %}
+
+    {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function toggleEdit(productId) {
+    const viewRow = document.getElementById('view-' + productId);
+    const editRow = document.getElementById('edit-' + productId);
+
+    if (!editRow) return;
+
+    if (editRow.style.display === 'none') {
+        viewRow.style.display = 'none';
+        editRow.style.display = '';
+    } else {
+        viewRow.style.display = '';
+        editRow.style.display = 'none';
+    }
+}
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 style="text-align:center;">Add New Product</h2>
+
+<!-- Optional: show message if user somehow reaches this page without permission -->
+
+{% if current_user.role not in ['admin', 'editor'] %} <p style="color:red; text-align:center;">
+You do not have permission to add products. </p>
+{% else %}
+
+<form method="POST" action="{{ url_for('inventory.add_product') }}" class="row-input">
+
+    <label>Name:</label>
+    <input type="text" name="name" required minlength="1" maxlength="45">
+
+    <label>Price:</label>
+    <input type="number" name="price" required min="0" max="9999.99" step="0.01">
+
+    <label>Quantity:</label>
+    <input type="number" name="quantity" required min="0" max="10000" step="1">
+
+    <label>Category:</label>
+    <select name="category">
+        {% for category in categories %}
+            <option value="{{ category }}">{{ category }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Add Product</button>
+
+</form>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1 style="text-align:center">Dashboard</h1>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h2 style="text-align:center; margin-top:40px;">Inventory Quantity by Category</h2>
+<div style="max-width:900px; height:400px; margin:20px auto;">
+    <canvas id="categoryChart"></canvas>
+</div>
+
+<h2 style="text-align:center; margin-top:40px;">Inventory Value by Category</h2>
+<div style="max-width:600px; height:400px; margin:20px auto;">
+    <canvas id="categoryValueChart"></canvas>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("{{ url_for('inventory.category_data') }}")
+        .then(response => response.json())
+        .then(data => {
+            const labels = data.map(item => item.Category);
+            const values = data.map(item => Number(item.total));
+
+            const ctx = document.getElementById('categoryChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'bar',           // vertical bars
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Total Quantity per Category',
+            data: values,
+            backgroundColor: 'rgba(54, 162, 235, 0.7)',  // optional
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,  // fills container height
+        scales: {
+            y: {
+                beginAtZero: true,
+                ticks: { precision: 0 } // removes decimals
+            },
+            x: {
+                ticks: { autoSkip: false } // show all category labels
+            }
+        },
+        plugins: {
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+        })
+        .catch(error => console.error("Error loading chart:", error));
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetch("{{ url_for('inventory.category_value_data') }}")
+        .then(response => response.json())
+        .then(data => {   // ← data is already the array
+            const labels = data.map(item => item.Category);
+            const values = data.map(item => Number(item.total_value));
+
+            const ctx = document.getElementById('categoryValueChart').getContext('2d');
+
+            new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: [
+                            '#007bff', '#28a745', '#dc3545', '#ffc107', '#6f42c1',
+                            '#fd7e14', '#20c997', '#6610f2', '#e83e8c', '#17a2b8',
+                            '#343a40', '#fd3498', '#00bcd4', '#ff5722', '#795548',
+                            '#9c27b0', '#8bc34a', '#ff9800', '#03a9f4', '#607d8b'
+                        ],
+                        borderColor: '#fff',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const total = context.dataset.data.reduce((a,b) => a+b, 0);
+                                    const percent = ((value / total) * 100).toFixed(2);
+                                    return `${context.label}: $${value} (${percent}%)`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })
+        .catch(err => console.error("Error loading pie chart:", err));
+});
+</script>
+
+{% endblock %}

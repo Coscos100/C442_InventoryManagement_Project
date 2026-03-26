@@ -1,0 +1,228 @@
+/* ----- BODY & TABLE ----- */
+body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f4f6f9;
+}
+
+table {
+    border-collapse: collapse;
+    width: 95%;
+    margin: 0 auto;
+    background: white;
+    box-shadow: 0 0 5px #ccc;
+    table-layout: fixed;
+}
+
+td, th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+td input {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+td select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+nav a {
+    margin-right: 10px;
+    text-decoration: none;
+    color: #007bff;
+}
+
+h1 {
+    color: black;
+}
+
+td button,
+td a[onclick*="confirm"],
+td a.delete-btn {
+    padding: 5px 10px;               /* same padding for uniform size */
+    border: none;                     /* remove default border */
+    border-radius: 4px;               /* rounded corners */
+    cursor: pointer;                  /* pointer on hover */
+    color: white;                     /* text color */
+    font-family: Arial, sans-serif;   /* same font for all */
+    font-size: 14px;                  /* consistent size */
+    line-height: 1.2;                 /* ensures uniform height */
+    display: inline-block;            /* allows padding to work on links */
+    text-align: center;
+    text-decoration: none;            /* remove underline for links */
+    transition: background-color 0.2s ease; /* smooth hover */
+}
+
+/* ----- BUTTON COLORS ----- */
+
+/* Edit button */
+td button[onclick*="toggleEdit"] {
+    background-color: #007bff;
+}
+
+td button[onclick*="toggleEdit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Update button (all submit buttons except delete) */
+td button[type="submit"]:not(.delete-btn) {
+    background-color: #28a745;
+}
+
+td button[type="submit"]:not(.delete-btn):hover {
+    background-color: #218838;
+}
+
+/* Delete button */
+td button.delete-btn {
+    background-color: #dc3545;
+}
+
+td button.delete-btn:hover {
+    background-color: #b02a37;
+}
+
+td:last-child {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* ----- HOVER EFFECTS ----- */
+td button[onclick*="toggleEdit"]:hover {
+    background-color: #0056b3;
+}
+
+td button[type="submit"]:not(.delete-btn):hover {
+    background-color: #218838;
+}
+
+td button.delete-btn:hover {
+    background-color: #b02a37;
+}
+
+
+/* Container styling */
+.search-form {
+    display: flex;               /* input + button on same line */
+    justify-content: center;     /* center form */
+    margin-bottom: 20px;         /* space from table */
+    gap: 5px;                    /* space between input and button */
+}
+
+/* Input styling */
+.search-form input[type="text"] {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 250px;
+    outline: none;
+    transition: border 0.2s ease;
+}
+
+/* Input focus effect */
+.search-form input[type="text"]:focus {
+    border-color: #007bff;
+}
+
+/* Button styling */
+.search-form button {
+    padding: 6px 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Button hover effect */
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+
+/* Create an account button */
+
+.auth-container {
+    max-width: 400px;
+    margin: auto;
+}
+
+.auth-container input,
+.auth-container button,
+.auth-container .reg-btn {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    margin: 5px 0;
+}
+
+/* Login button */
+.auth-container button {
+    padding: 8px;
+}
+
+
+/* Flash Messages */
+.flashes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.flashes .success {
+    color: green;
+    padding: 10px;
+}
+
+.flashes .error {
+    color: red;
+    padding: 10px;
+
+}
+
+
+/* Center the form on the page */
+.row-input {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px; /* consistent spacing between elements */
+}
+
+/* Labels */
+.row-input label {
+    font-weight: 600;
+}
+
+/* Inputs + select */
+.row-input input,
+.row-input select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 14px;
+    margin: 0 0 5px 0;
+}
+
+
+/* Button */
+.row-input button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+}
