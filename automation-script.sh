@@ -18,8 +18,13 @@ if [[ ! -f "$APP_DIR/Dockerfile" ]]; then
     exit 1
 fi
 
-CONTAINER_NAME="$(basename "$APP_DIR")-container"
-IMAGE_NAME="$(basename "$APP_DIR")-image"
+BASE_NAME="$(basename "$APP_DIR")"
+BASE_NAME="${BASE_NAME,,}"           # lowercase
+BASE_NAME="${BASE_NAME//_/-}"        # replace underscores with dashes
+BASE_NAME="${BASE_NAME// /-}"        # replace spaces (just in case)
+
+CONTAINER_NAME="${BASE_NAME}-container"
+IMAGE_NAME="${BASE_NAME}-image"
 
 echo "App directory: $APP_DIR"
 echo "Image name: $IMAGE_NAME"
